@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title class="ion-text-center">Agregar PT</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-searchbar animated="animated" (ionChange)="Buscar($event)"></ion-searchbar>
+<ion-content>
+  <ion-grid class="ion-2x">
+    <ion-row
+      style="position: sticky;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 9999;"
+    >
+      <ion-col size="8">Descripcion</ion-col>
+
+      <!-- <ion-col col-2 >Cod.</ion-col> -->
+
+      <ion-col>Unid.</ion-col>
+    </ion-row>
+
+    <ion-row style="border-bottom: 0.5px solid gray;" *ngFor="let dato of pt | filtro:txtBuscar">
+      <ion-col size="8">{{ dato.DESCRIPCION }}</ion-col>
+      <ion-col class="ion-2x">
+        <ion-input
+          text-ri="text-ri"
+          type="number"
+          color="primary"
+          [(ngModel)]="dato.UNIDADES"
+          (change)="Calcular(dato)"
+        ></ion-input>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+<ion-footer>
+  <ion-toolbar>
+    <ion-button expand="block" color="primary" (click)="BtnCerrar()"
+      >Cerrar</ion-button
+    >
+    <br />
+  </ion-toolbar>
+</ion-footer>

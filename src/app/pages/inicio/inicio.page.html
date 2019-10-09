@@ -1,0 +1,206 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title class="ion-text-center">
+      Inventario Sweet & Coffee
+    </ion-title>
+    <ion-buttons slot="end" style="zoom:1.5;">
+      <ion-button (click)="btnDeleteData()" expand="full" color="primary">
+        <ion-icon name="trash" style="zoom:1.5;"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-item>
+  <ion-label class="ion-1x">Establecimiento</ion-label>
+
+  <ion-select
+  [disabled]="isBtnCargar"  
+  [(ngModel)]="idEstablecimiento"
+  (ngModelChange)="SelectEstablecimiento($event)"
+    class="ion-1x"
+  >
+    <ion-select-option
+      class="ion-1x"
+      *ngFor="let locales of establecimientos"
+      [value]="locales.CODALMACEN"
+    >
+      <ion-label class="ion-2x">{{locales.NOMBREALMACEN}}</ion-label>
+    </ion-select-option>
+  </ion-select>
+</ion-item>
+
+<ion-button
+    [disabled]="isBtnCargar"
+    expand="block"
+    color="primary"
+    (click)="BtnClickCargar()"
+  >Cargar Inventario</ion-button>
+  <ion-radio-group  (ionChange)="radioGroupChange($event)" class="tab1-footer">
+    <!-- <ion-row>
+        <ion-list-header>
+            <ion-label>TIPO BUSQUEDA</ion-label>
+        </ion-list-header>
+    </ion-row>
+  -->  
+    <ion-row>
+        <ion-col>
+            <ion-item>
+               <ion-label>TIPO BUSQUEDA</ion-label>
+          </ion-item>
+        </ion-col>  
+      <ion-col>
+             <ion-item>
+                <ion-label>TODOS</ion-label>
+            <ion-radio slot="start" value="all" checked></ion-radio>
+           </ion-item>
+         </ion-col>
+    
+        <ion-col>
+            <ion-item>
+                <ion-label>SECCIONES</ion-label>
+          <ion-radio slot="start" value="secciones"></ion-radio>
+           </ion-item>
+        </ion-col>
+    
+        <ion-col>
+            <ion-item>
+                <ion-label>SUBGRUPO CONTABLE</ion-label>
+          <ion-radio slot="start" value="sub_contable"></ion-radio>
+           </ion-item>
+        </ion-col>
+    
+    </ion-row>
+    </ion-radio-group>    
+  <ion-row>
+    <ion-col>
+        <ion-searchbar #txtBusqueda [disabled]="isBusquedaTexto" animated="animated" placeholder="BUSQUEDA POR DESCRIPCION" (ionCancel)="onCancelBusqueda($event)" (ionChange)="Buscar($event)"></ion-searchbar>
+    </ion-col>
+    <ion-col>
+        <ion-item>
+            <ion-label color="primary">Tipo de Busqueda</ion-label>
+            <ion-select
+            [disabled]="isBusqueda"  
+            [(ngModel)]="idBusqueda"
+              (ngModelChange)="SelectSeccion($event)"
+              class="ion-1x"
+            >
+              <ion-select-option
+                class="ion-1x"
+                *ngFor="let seccion of Busqueda"
+                [value]="seccion.SECCION"
+              >
+                <ion-label class="ion-2x">{{ seccion.DESCRIPCION }}</ion-label>
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+    </ion-col>
+  </ion-row>
+  <ion-content class="ion-1x;centrar_content">
+      <ion-grid class="ion-2x">
+        <ion-row
+          style="position: sticky;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 9999;"
+        >
+          <ion-col size="6">Descripcion</ion-col>
+    
+          <!-- <ion-col col-2 >Cod.</ion-col> -->
+    
+          <ion-col>Unid.</ion-col>
+          <ion-col> </ion-col>
+          <ion-col>Fracc.</ion-col>
+          <ion-col>Adicc.</ion-col>
+          <ion-col>Stock</ion-col>
+    
+          <ion-col>Difer</ion-col>
+        </ion-row>
+    
+        <ion-row
+          style="border-bottom: 0.5px solid gray;"
+          *ngFor="let dato of pagedItems | filtro:txtBuscar"
+        >
+          <ion-col size="6">{{ dato.DESCRIPCION }}</ion-col>
+    
+          <!-- <ion-col col-2 text-center>
+                      {{dato.orden}}
+                  </ion-col> -->
+    
+          <ion-col class="ion-1x">
+            <ion-input
+              text-ri="text-ri"
+              type="number"
+              color="primary"
+              [(ngModel)]="dato.UNIDADES"
+              (change)="Calcular(dato)"
+            ></ion-input>
+          </ion-col>
+          <ion-col class="ion-1x">
+              <ion-button color="primary" (click)="Mas(dato)">
+                  <ion-icon name="calculator"></ion-icon>
+              </ion-button>
+          </ion-col>
+          <ion-col class="ion-1x">
+              <ion-input
+                text-ri="text-ri"
+                type="number"
+                color="primary"
+                [(ngModel)]="dato.FRACCION"
+                (change)="Calcular(dato,1)"
+              ></ion-input>
+            </ion-col>
+          <ion-col>
+              {{ dato.ADICIO | number: "1.3-3" }}
+            </ion-col>
+          <ion-col>
+            {{ dato.STOCK | number: "1.3-3" }}
+          </ion-col>
+    
+          <ion-col>
+            {{ dato.DIFER | number: "1.3-3" }}
+          </ion-col>
+        </ion-row>
+      </ion-grid>      
+    </ion-content>
+<ion-footer>
+    <div class="center">
+        <!-- pager -->
+      <ul *ngIf="pager.pages && pager.pages.length" expand="block" class="pagination">
+        <li [ngClass]="{ disabled: pager.currentPage === 1 }">
+          <a (click)="setPage(1)">First</a>
+        </li>
+        <li [ngClass]="{ disabled: pager.currentPage === 1 }">
+          <a (click)="setPage(pager.currentPage - 1)">Previous</a>
+        </li>
+        <li
+          *ngFor="let page of pager.pages"
+          [ngClass]="{ active: pager.currentPage === page }"
+        >
+          <a (click)="setPage(page)">{{ page }}</a>
+        </li>
+        <li [ngClass]="{ disabled: pager.currentPage === pager.totalPages }">
+          <a (click)="setPage(pager.currentPage + 1)">Next</a>
+        </li>
+        <li [ngClass]="{ disabled: pager.currentPage === pager.totalPages }">
+          <a (click)="setPage(pager.totalPages)">Last</a>
+        </li>
+      </ul>
+      </div>
+  <ion-toolbar>
+    <ion-button
+    [disabled]="isDisabled" 
+    expand="block"
+      color="primary"
+      (click)="BtnAddPt()"
+    >Adicionar PT</ion-button>
+    <br>  
+    <ion-button
+     
+    expand="block"
+      color="primary"
+      (click)="BtnGenerarArchivo()"
+    >Generar Inventario</ion-button>
+    <br>
+  </ion-toolbar>
+</ion-footer>

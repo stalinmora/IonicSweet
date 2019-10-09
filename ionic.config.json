@@ -1,5 +1,7 @@
 {
   "name": "InventarioSC",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }

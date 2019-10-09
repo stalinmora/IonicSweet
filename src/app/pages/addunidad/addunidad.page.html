@@ -1,0 +1,34 @@
+<ion-toolbar>
+  <ion-buttons style="zoom:2.0;" slot="end">
+    <button size="large" (click)="add()">
+      <ion-icon name="add"></ion-icon>
+    </button>
+  </ion-buttons>
+  <ion-title text-capitalize>{{ listado.DESCRIPCION }}</ion-title>
+</ion-toolbar>
+
+<ion-content>
+  <ion-list>
+    <ion-item-sliding *ngFor="let valor of valores">
+      <ion-item text-capitalize>
+        {{ valor.txtConteo }}
+      </ion-item>
+      <ion-item-options>
+        <button style="zoom:2.0;" ion-button icon-only (click)="edit(valor)" light >
+          <ion-icon name="paper"></ion-icon>
+        </button>
+        <button style="zoom:2.0;" ion-button icon-only (click)="delete(valor)" danger>
+          <ion-icon name="trash"></ion-icon>
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+</ion-content>
+<ion-footer>
+  <ion-toolbar>
+    <ion-button expand="block" color="primary" (click)="BtnCerrar()"
+      >Cerrar</ion-button
+    >
+    <br />
+  </ion-toolbar>
+</ion-footer>
