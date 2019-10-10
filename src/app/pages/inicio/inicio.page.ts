@@ -249,7 +249,6 @@ export class InicioPage implements OnInit {
         var x = a[key]; var y = b[key];
         return ((x < y) ? -1 : ((x > y) ? 0 : 1));
     });
-    
 }
 
   VerificarDataInicial() {
